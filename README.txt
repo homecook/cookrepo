@@ -27,7 +27,6 @@ git checkout master (switch to master)
 git merge test
 git push origin master (to push merge branch)
 
-
 CREATING A BRANCH
 git checkout -b testbranch 
 
@@ -39,7 +38,6 @@ git branch -D testbranch
 
 DELETING REMOTE BRANCH
 git push origin --delete testbranch
-
 CLONING AN ONLINE GIT REPO
 git clone [url] 
 (only master branch will be copied initally)
