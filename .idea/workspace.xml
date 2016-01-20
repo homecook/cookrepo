@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f818ed7d-adfc-4bd1-83ca-aa5723f538c1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cookdj/users/templates/users/user_init.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cookdj/cookdj/urls.py" afterPath="$PROJECT_DIR$/cookdj/cookdj/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cookdj/users/views.py" afterPath="$PROJECT_DIR$/cookdj/users/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cookrepo.iws" />
     <ignored path=".idea/workspace.xml" />
