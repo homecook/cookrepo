@@ -29,16 +29,24 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.conf import settings # needed to check for debug status etc..
-from users import views
+from users import views as user_views
+from meals import views as meal_views
 
+from rest_framework import routers
+router = routers.DefaultRouter()
+router.register(r'users', user_views.UserViewSet)
+router.register(r'meals', meal_views.MealViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.test_home, name='home'),
-    url(r'^user.details/(?P<user_id>\d+)$', views.test_user_details, name='user_details')
+    url(r'^$', user_views.test_home, name='home'),
+    url(r'^user.details/(?P<user_id>\d+)$', user_views.test_user_details, name='user_details'),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^cook.meals/(?P<cook_id>\d+)$', meal_views.cook_meals_view, name='meals_by_cook')
 ]
 
 

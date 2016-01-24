@@ -2,7 +2,10 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from .models import User, UserPaymentInfo
 
-# Create your views here.
+from .serializers import UserSerializer
+from rest_framework import viewsets
+
+# Basic django views
 
 def test_home(request):
     return HttpResponse('this is homecook homepage!')
@@ -22,3 +25,13 @@ def test_user_details(request, user_id):
     except Exception as err:
         print(err)
         return render_to_response("users/invalid_user.html", {'user_id': user_id})
+
+
+# REST views
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
