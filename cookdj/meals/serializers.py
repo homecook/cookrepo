@@ -1,7 +1,7 @@
 from .models import Meal, MealRating
 from rest_framework import serializers
 
-class MealBasicInfoSerializer(serializers.HyperlinkedModelSerializer):
+class MealBasicInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meal
         fields = ('meal_id',
