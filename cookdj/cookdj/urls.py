@@ -46,7 +46,9 @@ urlpatterns = [
     url(r'^user.details/(?P<user_id>\d+)$', user_views.test_user_details, name='user_details'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^cook.meals/(?P<cook_id>\d+)$', meal_views.cook_meals_view, name='meals_by_cook')
+    url(r'^cook.meals/(?P<cook_id>\d+)$', meal_views.cook_meals_view, name='meals_by_cook'),
+    url(r'^meal.create/', meal_views.meal_detail, name='create_meal'),
+    url(r'^meal.details/(?P<meal_id>\d+)$', meal_views.meal_detail, name='meal_detail')
 ]
 
 
