@@ -32,23 +32,28 @@ Including another URLconf
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.conf import settings # needed to check for debug status etc..
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
+
 from users import views as user_views
 from meals import views as meal_views
 
-from rest_framework import routers
-router = routers.DefaultRouter()
-router.register(r'users', user_views.UserViewSet)
-router.register(r'meals', meal_views.MealViewSet)
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'meals', meal_views.MealViewSet)   # basic meal views for retrieve, update, delete, create
+router.register(r'users', user_views.UserViewSet)   # basic user views for retrieve, update, delete, create
+
+cooks_meals = meal_views.MealViewSet.as_view({      # detailed route for getting basic meal information for a cook
+    'get': 'cooks_meals'    # function user the viewset that this view is mapped to
+})
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', user_views.test_home, name='home'),
-    url(r'^user.details/(?P<user_id>\d+)$', user_views.test_user_details, name='user_details'),
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^cook.meals/(?P<cook_id>\d+)$', meal_views.cook_meals_view, name='meals_by_cook'),
-    url(r'^meal.create/', meal_views.meal_detail, name='create_meal'),
-    url(r'^meal.details/(?P<meal_id>\d+)$', meal_views.meal_detail, name='meal_detail')
+    url(r'^api-auth/$', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^cook.meals/(?P<cook_id>\d+)$', cooks_meals, name='cooks_meals'),     # detailed route for cook's meals
+    url(r'^', include(router.urls))
 ]
 
+# Adding url suffix patterns, we allow for alternate formats to be specified in url (like appending .json at end of url)
+# urlpatterns = format_suffix_patterns(urlpatterns)
 

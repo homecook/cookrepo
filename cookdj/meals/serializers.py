@@ -17,7 +17,8 @@ class MealBasicInfoSerializer(serializers.ModelSerializer):
 class MealSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meal
-        fields = ('meal_cook',
+        fields = (  'meal_id',
+                    'meal_cook',
                     'meal_name',
                     'meal_description',
                     'meal_available_date',
