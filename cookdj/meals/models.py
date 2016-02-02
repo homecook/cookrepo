@@ -4,6 +4,7 @@ from django.db import models
 from django.db import models
 from django.utils import timezone
 import datetime
+from orders.models import Order
 
 # Create your models here.
 
@@ -31,7 +32,7 @@ class Meal(models.Model):
                         ('Other', 'Other')]
 
     meal_id = models.AutoField(primary_key=True)
-    meal_cook = models.ForeignKey('users.User')  # can further validate that user is indeed a cook..
+    meal_cook = models.ForeignKey('users.User', related_name='meal')  # can further validate that user is indeed a cook..
     meal_name = models.CharField(max_length=150)   # short meal name
     meal_description = models.TextField(blank=True, default='')
     meal_available_date = models.DateField(blank=False)
@@ -49,6 +50,8 @@ class Meal(models.Model):
     meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now())
     meal_modification_datetime = models.DateTimeField(blank=False, default=timezone.now())
 
+    meal_subscribers = models.ManyToManyField('users.User', through='orders.Order', related_name='meal_orders')
+
     def __str__(self):
         return self.meal_name
 
@@ -63,7 +66,24 @@ class Meal(models.Model):
     def meal_expired(self):
         return timezone.now() >= self.meal_expiry_date
 
+    def _num_orders(self):
+        "Returns the number of active orders for this meal."
+        orders = Order.objects.filter(order_meal=self.meal_id)
+        return len(orders)
+
+    def _num_servings_ordered(self):
+        "Returns the number of total servings ordered for this meal."
+        orders = Order.objects.filter(order_meal=self.meal_id)
+        servings_ordered =0
+        for order in orders:
+            servings_ordered += order.order_portions
+        return servings_ordered
+
+    meal_num_orders = property(_num_orders)
+    meal_num_servings_ordered = property(_num_servings_ordered)
+
     # TODO: implement validators for basic information
+
 
 class MealRating(models.Model):
     '''

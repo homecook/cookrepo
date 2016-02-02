@@ -56,4 +56,3 @@ urlpatterns = [
 
 # Adding url suffix patterns, we allow for alternate formats to be specified in url (like appending .json at end of url)
 # urlpatterns = format_suffix_patterns(urlpatterns)
-

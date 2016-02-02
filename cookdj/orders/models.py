@@ -13,8 +13,8 @@ class Order(models.Model):
     '''
 
     order_id = models.AutoField(primary_key=True)
-    order_meal = models.ForeignKey('meals.Meal')
-    order_user = models.ForeignKey('users.User')  # TODO: Check subscriber isn't same as cook...but why?
+    order_meal = models.ForeignKey('meals.Meal', related_name='orders')
+    order_user = models.ForeignKey('users.User', related_name='orders')  # TODO: Check subscriber isn't same as cook...but why?
     order_portions = models.IntegerField(blank=False)  # TODO: Validate order_portions <= available_portions
     # order_special_notes = models.TextField(blank=True, default='')
     order_reviewed = models.BooleanField(default=False)
