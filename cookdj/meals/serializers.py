@@ -3,7 +3,9 @@ from rest_framework import serializers
 
 
 class MealBasicInfoSerializer(serializers.ModelSerializer):
-    orders = serializers.PrimaryKeyRelatedField(many=True, read_only=True)      # reverse relationship to Order object
+    # you can present orders in other ways (like StringRelatedField, PrimaryKeyRelatedField (default), etc.)
+    # if more detailed/custom info necessary create a nested order serializer
+    orders = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Meal
@@ -17,7 +19,10 @@ class MealBasicInfoSerializer(serializers.ModelSerializer):
                   'meal_servings',
                   'orders',
                   'meal_num_orders',
-                  'meal_num_servings_ordered')
+                  'meal_num_servings_ordered',
+                  'meal_is_available',
+                  'meal_cooking_tommorow'
+                  )
 
 
 class MealSerializer(serializers.ModelSerializer):
@@ -39,4 +44,7 @@ class MealSerializer(serializers.ModelSerializer):
                     'meal_spice_level',
                     'meal_cusine',
                     'meal_mealtype',
-                    'meal_creation_datetime')
+                    'meal_creation_datetime',
+                    'orders',   # note this defaults to PrimaryKeyRelatedField type (automatically identifies reverse relationship)
+                    'meal_subscribers',
+                    )

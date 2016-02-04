@@ -57,7 +57,7 @@ class UserPaymentInfo(models.Model):
                       ('Bank', 'Bank Account'),
                       ]
 
-    payment_user = models.ForeignKey(User)
+    payment_user = models.ForeignKey(User, on_delete=models.CASCADE)
     payment_default_pay = models.BooleanField(default=False)
     payment_default_receive = models.BooleanField(default=False)
     payment_account_type = models.CharField(choices=ACCOUNT_CHOICES, max_length=240)

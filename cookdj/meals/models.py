@@ -32,7 +32,7 @@ class Meal(models.Model):
                         ('Other', 'Other')]
 
     meal_id = models.AutoField(primary_key=True)
-    meal_cook = models.ForeignKey('users.User', related_name='meal')  # can further validate that user is indeed a cook..
+    meal_cook = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='meal')  # can further validate that user is indeed a cook..
     meal_name = models.CharField(max_length=150)   # short meal name
     meal_description = models.TextField(blank=True, default='')
     meal_available_date = models.DateField(blank=False)
@@ -50,21 +50,23 @@ class Meal(models.Model):
     meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now())
     meal_modification_datetime = models.DateTimeField(blank=False, default=timezone.now())
 
-    meal_subscribers = models.ManyToManyField('users.User', through='orders.Order', related_name='meal_orders')
+    meal_subscribers = models.ManyToManyField('users.User', through='orders.Order', related_name='meals')
+
 
     def __str__(self):
         return self.meal_name
 
-    def cooking_tommorow(self):
-        flag =  not self.meal_expired() and self.meal_available_date == timezone.now().date() + datetime.timedelta(days=1)
+    def _cooking_tommorow(self):
+        flag =  self._is_available() and self.meal_available_date <= timezone.now().date() + datetime.timedelta(days=1)
         return flag
 
     def cooking_next_10_days(self):
-        flag = not self.meal_expired() and self.meal_available_date <= timezone.now().date() + datetime.timedelta(days=10)
+        flag = self._is_available() and self.meal_available_date <= timezone.now().date() + datetime.timedelta(days=10)
         return flag
 
-    def meal_expired(self):
-        return timezone.now() >= self.meal_expiry_date
+    def _is_available(self):
+        meal_available_datetime = timezone.make_aware(datetime.datetime.combine(self.meal_available_date, self.meal_available_time))
+        return timezone.now() <= meal_available_datetime
 
     def _num_orders(self):
         "Returns the number of active orders for this meal."
@@ -81,6 +83,8 @@ class Meal(models.Model):
 
     meal_num_orders = property(_num_orders)
     meal_num_servings_ordered = property(_num_servings_ordered)
+    meal_is_available = property(_is_available)
+    meal_cooking_tommorow = property(_cooking_tommorow)
 
     # TODO: implement validators for basic information
 
@@ -98,9 +102,9 @@ class MealRating(models.Model):
                       (0, 'Unrated/NA')
                       ]
 
-    rating_order = models.OneToOneField('orders.Order')    # Each order can only be rated once../or reviewed..becomes primary key..
-    rating_meal = models.ForeignKey(Meal)    # Must be able to link to a meal
-    rating_user = models.ForeignKey('users.User')    # Must be able to link to a user (TODO: Can't be cook!)
+    rating_order = models.OneToOneField('orders.Order', on_delete=models.CASCADE)    # Each order can only be rated once../or reviewed..becomes primary key..
+    rating_meal = models.ForeignKey(Meal, on_delete=models.CASCADE)    # Must be able to link to a meal
+    rating_user = models.ForeignKey('users.User', on_delete=models.CASCADE)    # Must be able to link to a user (TODO: Can't be cook!)
 
     # Rating on 4 basic dimensions: taste, value, service, punctuality
     rating_value = models.IntegerField(choices=RATING_CHOICES)  # could make this comma seperated integers, but have to do more validation
