@@ -53,3 +53,36 @@ CHECK WHICH BRANCH YOU'RE ON
 git branch (local)
 git branch -a (show all branches, remote branches only cloned when switched to)
 git status
+
+HARD RESET OF CURRENT BRANCH HEAD USING REMOTE BRANCH
+git fetch origin
+git reset --hard origin/master
+
+excellent guide (no advanced shit!):
+http://rogerdudler.github.io/git-guide/
+
+-----------------------------------------------
+IGNORING FILES (e.g. Pycharm .idea folder):
+http://stackoverflow.com/questions/11124053/accidentally-committed-idea-directory-files-into-git
+
+  Add .idea directory to the list of ignored files
+  First, add it to .gitignore, so it is not accidentally committed by you (or someone else) again:
+  
+  .idea
+  Remove it from repository
+  Second, remove the directory only from the repository, but do not delete it locally. To achieve that, do what is listed here:
+  
+  Git: Remove a file from the repository without deleting it from the local filesystem
+  Send the change to others
+  Third, commit the .gitignore file and the removal of .idea from the repository. After that push it to the remote(s).
+  
+  Summary
+  The full process would look like this:
+  
+  $ echo '.idea' >> .gitignore
+  $ git rm -r --cached .idea
+  $ git add .gitignore
+  $ git commit -m '(some message stating you added .idea to ignored entries)'
+  $ git push
+  
+  ---------------------------------------------------
