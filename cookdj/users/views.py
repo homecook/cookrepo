@@ -1,9 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse
+from .models import User, UserPaymentInfo
 
-# Create your views here.
+from .serializers import UserSerializer
+from rest_framework import viewsets
+import ipdb
 
-def user_initialize(request, userid):
-    # include user initlizations
-    # but probably should be done as a class based view
-    # with def __init__(self)
-    return render(request, 'user_init.html', {'user_id': userid})
+# Basic django views
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
