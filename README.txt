@@ -1,6 +1,8 @@
-GIT Notes
+========================================================
+GIT NOTES
+========================================================
 
-configuring after GIT install
+configuring after GIT install (do always to use github)
 git config --global user.name "username"
 git config --global user.email "your@email.com"
 
@@ -42,9 +44,12 @@ CLONING AN ONLINE GIT REPO
 git clone [url] 
 (only master branch will be copied initally)
 
-ADDING REMOTE GIT REPO
-git remote add git@github.com:nsyed1/reponame.git
-(note sure about this one)
+ADDING LOCAL REPO TO REMOTE SERVER (push local project to github)
+git remote add git@github.com:nsyed1/reponame.git 
+
+CLONING (bringing existing github project to local drive)
+git clone username@host:/path/to/repository
+
 
 CHECKING REMOTE REPO
 git remote -v
