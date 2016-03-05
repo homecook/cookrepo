@@ -50,9 +50,14 @@ git remote add git@github.com:nsyed1/reponame.git
 CLONING (bringing existing github project to local drive)
 git clone username@host:/path/to/repository
 
-
 CHECKING REMOTE REPO
 git remote -v
+
+REMOTE REMOTE URL 
+git remote rm remote_name
+
+ADDING REMOTE URL (typically remote_name is 'origin')
+git remote add remote_name path_to_server
 
 CHECK WHICH BRANCH YOU'RE ON
 git branch (local)
