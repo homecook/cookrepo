@@ -28,7 +28,7 @@ IF_EXISTS = 'append'    # 'append': add the data, 'replace': drop and recreate t
 WRITE_INDEX = False           #  write the dataframe index to 'index' column in datatable
 
 DB_CONNECTION_STRING = 'postgresql+psycopg2://dkkqsvpjtlsttd:x4c-mLFohV_mKpmcohAwXwc4ze@ec2-54-83-202-64.compute-1.amazonaws.com:5432/d1jei2gq0hpjc7'
-db = create_engine(DB_CONNECTION_STRING)
+db = create_engine(DB_CONNECTION_STRING, connect_args={'sslmode':'require'})
 
 def quick_load_csv(csv_filename, db_tablename):
     ipdb.set_trace()
