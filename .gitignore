@@ -2,8 +2,10 @@
 .idea
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
+*.pyc
+*.pyo
+*__pycache__/
 
 # C extensions
 *.so
