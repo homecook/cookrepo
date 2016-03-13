@@ -32,7 +32,7 @@ class Meal(models.Model):
                         ('Other', 'Other')]
 
     meal_id = models.AutoField(primary_key=True)
-    meal_cook = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='meal')  # can further validate that user is indeed a cook..
+    meal_cook = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='meals_cook')  # can further validate that user is indeed a cook..
     meal_name = models.CharField(max_length=150)   # short meal name
     meal_description = models.TextField(blank=True, default='')
     meal_available_date = models.DateField(blank=False)
@@ -50,11 +50,10 @@ class Meal(models.Model):
     meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now)
     meal_modification_datetime = models.DateTimeField(blank=False, default=timezone.now)
 
-    meal_subscribers = models.ManyToManyField('auth.User', through='orders.Order', related_name='meals')
-
+    meal_subscribers = models.ManyToManyField('auth.User', through='orders.Order', related_name='meals_subscribe')
 
     def __str__(self):
-        return self.meal_name
+        return self.meal_name + ' by ' + str(self.meal_cook) + ' on ' + str(self.meal_available_date)
 
     def _cooking_tommorow(self):
         flag =  self._is_available() and self.meal_available_date <= timezone.now().date() + datetime.timedelta(days=1)

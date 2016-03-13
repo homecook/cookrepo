@@ -26,7 +26,7 @@ class User(models.Model):
                        ('NT', 'Northwest Territories')
                       ]
 
-    user_id = models.OneToOneField('auth.User', related_name='user_detail', on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField('auth.User', related_name='user_detail', on_delete=models.CASCADE, primary_key=True)
     user_fname = models.CharField(blank=False, max_length=240)
     user_lname = models.CharField(blank=False, max_length=240)
     user_address = models.CharField(blank=False, max_length=240)

@@ -4,6 +4,7 @@ from .models import Meal, MealRating
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework import permissions
 
 import ipdb
 
@@ -12,6 +13,7 @@ class MealViewSet(viewsets.ModelViewSet):
 
     queryset = Meal.objects.all()
     serializer_class = MealSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     @detail_route()
     def cooks_meals(self, request, cook_id):

@@ -25,4 +25,5 @@ class Order(models.Model):
     order_modification_datetime = models.DateTimeField(blank=False, default=timezone.now)
 
     def __str__(self):
-        return str(self.order_id) + ': ' + str(self.order_meal) + ' by ' + str(self.order_user) + ' (' + str(self.order_portions) + ' portions)'
+        return '{}: {} by {} ({} portions)'.format(str(self.order_id), str(self.order_meal), str(self.order_user),
+                                                   str(self.order_portions))
