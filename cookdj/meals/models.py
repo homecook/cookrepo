@@ -32,7 +32,7 @@ class Meal(models.Model):
                         ('Other', 'Other')]
 
     meal_id = models.AutoField(primary_key=True)
-    meal_cook = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='meal')  # can further validate that user is indeed a cook..
+    meal_cook = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='meal')  # can further validate that user is indeed a cook..
     meal_name = models.CharField(max_length=150)   # short meal name
     meal_description = models.TextField(blank=True, default='')
     meal_available_date = models.DateField(blank=False)
@@ -47,10 +47,10 @@ class Meal(models.Model):
     meal_spice_level = models.CharField(choices=SPICE_CHOICES, max_length=240)
     meal_cusine = models.CharField(choices=CUSINE_CHOICES, default='Other', max_length=240)
     meal_mealtype = models.CharField(choices=MEALTYPE_CHOICES, default='Other', max_length=240)
-    meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now())
-    meal_modification_datetime = models.DateTimeField(blank=False, default=timezone.now())
+    meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now)
+    meal_modification_datetime = models.DateTimeField(blank=False, default=timezone.now)
 
-    meal_subscribers = models.ManyToManyField('users.User', through='orders.Order', related_name='meals')
+    meal_subscribers = models.ManyToManyField('auth.User', through='orders.Order', related_name='meals')
 
 
     def __str__(self):
@@ -104,7 +104,7 @@ class MealRating(models.Model):
 
     rating_order = models.OneToOneField('orders.Order', on_delete=models.CASCADE)    # Each order can only be rated once../or reviewed..becomes primary key..
     rating_meal = models.ForeignKey(Meal, on_delete=models.CASCADE)    # Must be able to link to a meal
-    rating_user = models.ForeignKey('users.User', on_delete=models.CASCADE)    # Must be able to link to a user (TODO: Can't be cook!)
+    rating_user = models.ForeignKey('auth.User', on_delete=models.CASCADE)    # Must be able to link to a user (TODO: Can't be cook!)
 
     # Rating on 4 basic dimensions: taste, value, service, punctuality
     rating_value = models.IntegerField(choices=RATING_CHOICES)  # could make this comma seperated integers, but have to do more validation

@@ -23,3 +23,5 @@ class MealViewSet(viewsets.ModelViewSet):
         meals = self.queryset.filter(meal_cook=cook_id)
         serializer = MealBasicInfoSerializer(meals, many=True)      # override the default serializer
         return Response(serializer.data)
+
+

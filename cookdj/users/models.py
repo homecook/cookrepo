@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
+
 class User(models.Model):
     '''
     Houses basic (mostly static) user information
@@ -25,9 +26,7 @@ class User(models.Model):
                        ('NT', 'Northwest Territories')
                       ]
 
-    user_id = models.AutoField(primary_key=True)
-    user_email = models.EmailField(blank=False)
-    user_pass = models.CharField(blank=False, max_length=8)  # do validation
+    user_id = models.OneToOneField('auth.User', related_name='user_detail', on_delete=models.CASCADE, primary_key=True)
     user_fname = models.CharField(blank=False, max_length=240)
     user_lname = models.CharField(blank=False, max_length=240)
     user_address = models.CharField(blank=False, max_length=240)
@@ -57,7 +56,7 @@ class UserPaymentInfo(models.Model):
                       ('Bank', 'Bank Account'),
                       ]
 
-    payment_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     payment_default_pay = models.BooleanField(default=False)
     payment_default_receive = models.BooleanField(default=False)
     payment_account_type = models.CharField(choices=ACCOUNT_CHOICES, max_length=240)
