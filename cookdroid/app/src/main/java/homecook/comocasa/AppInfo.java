@@ -2,14 +2,11 @@ package homecook.comocasa;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.*;
 import com.loopj.android.http.*;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -40,33 +37,11 @@ public class AppInfo extends Application
     private static final String PREF_AUTOLOGIN = "autologin";
     private SharedPreferences mSharedPreferences;
 
+    public HomecookRESTApiClient homecookRestApi;
+
     public AppInfo()
     {
-
-    }
-
-    public boolean Initialize()
-    {
-        //Initializing the app from shared preferences file
-
-        // Read the user's name,
-        // or an empty string if nothing found
-        Integer userId = mSharedPreferences.getInt(PREF_USERID, 0);
-
-        if (userId == 0) {
-            // Not logged in...time to go do this
-            Toast.makeText(this, "Not logged in, time to login pal...", Toast.LENGTH_LONG).show();
-            loginSuccess = false;
-            return false;
-        }
-        else
-        {
-            // If the name is valid. OK!
-            Toast.makeText(this, "Welcome back " + userId.toString(), Toast.LENGTH_LONG).show();
-            this.userId = userId;
-            loginSuccess = true;
-            return true;
-        }
+        homecookRestApi = new HomecookRESTApiClient();
     }
 
     public Integer fetchUserId(String email)
@@ -79,13 +54,36 @@ public class AppInfo extends Application
         return userId;
     }
 
+    //Initializing app instance (set userid, etc) from shared preferences file
+    public boolean Initialize()
+    {
+        // Read the user's name,
+        // or an empty string if nothing found
+        Integer userId = mSharedPreferences.getInt(PREF_USERID, 0);
+
+        if (userId == 0) {
+            // Not logged in...time to go do this
+            Toast.makeText(this, "Not logged in, time to login pal...", Toast.LENGTH_LONG).show();
+            isLoggedIn = false;
+            return false;
+        }
+        else
+        {
+            // If the name is valid. OK!
+            Toast.makeText(this, "Welcome back " + userId.toString(), Toast.LENGTH_LONG).show();
+            this.userId = userId;
+            isLoggedIn = true;
+            return true;
+        }
+    }
+
+    //Initializing app instance (set userid, etc) from login page
     public void Initialize(String email, String password, boolean saveInfo)
     {
-        //Initializing the app from login page
         mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
         // Get and set userId
         this.userId = fetchUserId(email);
-        loginSuccess = true;
+        isLoggedIn = true;
 
         if (saveInfo)
         {
@@ -96,40 +94,39 @@ public class AppInfo extends Application
             e.putInt(PREF_USERID, this.userId);
         }
 
-        queryUsers();
+        HomecookRESTApiClientUsage.getMeals(homecookRestApi);
     }
 
     public int getUserId(){
         return userId;
     }
 
+    //TODO: convert this to isLogged in property with get/set
     public boolean isLoggedIn()
     {
         return isLoggedIn;
     }
 
-    private void queryUsers() {
-        //Sample query for users utilizing RESTAPI
-
-        // Prepare your search string to be put in a URL
-        // It might have reserved characters or something
-        //String urlString = "http://openlibrary.org/search.json?q=hunger+games+suzanne+collins";
-        String urlString = "http://openlibrary.org/search.json?q=hunger+games+suzanne+collins";
-
-        HomecookRestClientUsage.getMeals();
+    public void setLogin(boolean success)
+    {
+        isLoggedIn = success;
     }
+
 }
 
-class HomecookRestClientUsage {
+/**
+ * Define all android interactions with the homecook API (maybe not the right way to do it...)
+ */
+class HomecookRESTApiClientUsage {
 
     private static final String TAG = "HomecookRestClientUsage";
 
-    public static void getMeals() {
+    public static void getMeals(HomecookRESTApiClient homecookRestApi) {
         /*
         Handles meal data for meal view
          */
 
-        HomecookRestClient.get("meals.json", null, new JsonHttpResponseHandler() {
+        homecookRestApi.get("meals.json", null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
