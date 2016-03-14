@@ -2,6 +2,18 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 
+class UserLoginSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = (
+                  'id',
+                  'username',
+                  'password',
+                  'email'
+                  )
+
+
 class UserSerializer(serializers.ModelSerializer):
     " This serializes the django User class (django.contrib.auth.models.User), not the user details class."
 
