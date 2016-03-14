@@ -360,19 +360,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             //Parse response to see if login successful and set isLoggedIn to True
-                            Log.d(TAG, response.toString());
+                            Log.i(TAG, response.toString());
 
                             try {
                                 String mUserName = response.getString("username").toString();
                                 ((AppInfo) getApplication()).Initialize(mEmail, mUserName, mPassword, mSaveLoginInfo);
                             } catch (org.json.JSONException e) {
-                                Log.d(TAG, "Could not parse login response", e.getCause());
+                                Log.e(TAG, "Could not parse login response", e.getCause());
                             }
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.d(TAG, "Could not authenticate user", throwable);
+                            Log.e(TAG, "Could not authenticate user", throwable);
                         }
 
                     }
@@ -385,23 +385,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
 
-            try {
-                // Simulate network access.
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            // TODO: attempt authentication against a network service.
+            // Sets the isLoggedIn to true in AppInfo
             apiLogin();
 
-            if (((AppInfo) getApplication()).isLoggedIn()){
+            if (((AppInfo) getApplication()).isLoggedIn()) {
                 return true;
             }
 
             // TODO: register the new account here.
-            //return ((AppInfo) getApplication()).isLoggedIn();
-
             return false;
         }
 
@@ -413,7 +404,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                String welcome_string = "Welcome, " + mEmail + "!";
+                String welcome_string = "Welcome, " + ((AppInfo) getApplication()).getUserId() + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
                 //finish();
             }

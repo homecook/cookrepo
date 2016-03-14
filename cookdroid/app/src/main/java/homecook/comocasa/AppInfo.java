@@ -13,17 +13,11 @@ import org.json.JSONArray;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by krishan on 16-03-09.
- * Implemnt AyncTask (to carry out setting the userId, etc in the background when logging in)
+ * Maintains the state of the application
  */
 public class AppInfo extends Application
 {
     private static final String TAG = "AppInfo";
-
-    //Some RESTAPI urls
-    private static final String MEALS_URL = "http://127.0.0.1:8000/meals.json";
-    private static final String USERS_URL = "http://127.0.0.1:8000/users.json";
-    private static final String COOK_MEALS_URL = "http://127.0.0.1:8000/cook.meals/";
 
     //Store the userId for application-wide use
     private String userId;
@@ -38,21 +32,12 @@ public class AppInfo extends Application
     private static final String PREF_AUTOLOGIN = "autologin";
     private SharedPreferences mSharedPreferences;
 
+    // The homecook REST web api instance that is used throughout the application
     public HomecookRESTApiClient homecookRestApi;
 
     public AppInfo()
     {
         homecookRestApi = new HomecookRESTApiClient();
-    }
-
-    public Integer fetchUserId(String email)
-    {
-        //TODO: fetches the user_id from the given email for user
-
-        Integer userId = 0;
-        //Fetches the userId from API given the user's email
-
-        return userId;
     }
 
     //Initializing app instance (set userid, etc) from shared preferences file
@@ -97,13 +82,18 @@ public class AppInfo extends Application
             e.putString(PREF_USERID, username);
         }
 
-        HomecookRESTApiClientUsage.getMeals(homecookRestApi);
+        //TODO: Authenticate homecookRestApi by providing username/password
+        Log.i(TAG, "Successfully initialized app-info, and logged in " + username);
+
     }
 
     //TODO: convert this to isLogged in property with get/set
-    public boolean isLoggedIn()
-    {
+    public boolean isLoggedIn() {
         return isLoggedIn;
+    }
+
+    public String getUserId(){
+        return userId;
     }
 
 }
