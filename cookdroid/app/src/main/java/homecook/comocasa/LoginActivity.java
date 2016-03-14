@@ -356,6 +356,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             homecookRestApi.sync_get(url, null,
                     new JsonHttpResponseHandler() {
+
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             //Parse response to see if login successful and set isLoggedIn to True
@@ -394,19 +395,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             apiLogin();
 
-            // TODO: fake login against a list, remove later
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    if (pieces[1].equals(mPassword)){
-                        return true;
-                    }
-                }
+            if (((AppInfo) getApplication()).isLoggedIn()){
+                return true;
             }
 
             // TODO: register the new account here.
             //return ((AppInfo) getApplication()).isLoggedIn();
+
             return false;
         }
 
@@ -418,7 +413,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                //Initialize app-info
                 String welcome_string = "Welcome, " + mEmail + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
                 //finish();
