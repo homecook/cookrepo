@@ -23,7 +23,6 @@ def user_login(request, email, password):
     User login
     """
     validated = False
-    ipdb.set_trace()
     try:
         user = User.objects.get(email=email)
         if user.password == password:

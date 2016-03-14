@@ -26,7 +26,8 @@ public class AppInfo extends Application
     private static final String COOK_MEALS_URL = "http://127.0.0.1:8000/cook.meals/";
 
     //Store the userId for application-wide use
-    private int userId;
+    private String userId;
+    private String password;
     private Boolean isLoggedIn = false;
 
     //Save username and password for easy access
@@ -55,13 +56,14 @@ public class AppInfo extends Application
     }
 
     //Initializing app instance (set userid, etc) from shared preferences file
+    //TODO: Must update this to make sure all information can is validated against the server
     public boolean Initialize()
     {
         // Read the user's name,
         // or an empty string if nothing found
-        Integer userId = mSharedPreferences.getInt(PREF_USERID, 0);
+        String userId = mSharedPreferences.getString(PREF_USERID, "");
 
-        if (userId == 0) {
+        if (userId == "") {
             // Not logged in...time to go do this
             Toast.makeText(this, "Not logged in, time to login pal...", Toast.LENGTH_LONG).show();
             isLoggedIn = false;
@@ -78,11 +80,12 @@ public class AppInfo extends Application
     }
 
     //Initializing app instance (set userid, etc) from login page
-    public void Initialize(String email, String password, boolean saveInfo)
+    public void Initialize(String email, String username, String password, boolean saveInfo)
     {
         mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
         // Get and set userId
-        this.userId = fetchUserId(email);
+        this.userId = username;
+        this.password = password;
         isLoggedIn = true;
 
         if (saveInfo)
@@ -91,25 +94,16 @@ public class AppInfo extends Application
             e.putString(PREF_EMAIL, email);
             e.putString(PREF_PASSWORD, password);
             e.putBoolean(PREF_AUTOLOGIN, true);
-            e.putInt(PREF_USERID, this.userId);
+            e.putString(PREF_USERID, username);
         }
 
         HomecookRESTApiClientUsage.getMeals(homecookRestApi);
-    }
-
-    public int getUserId(){
-        return userId;
     }
 
     //TODO: convert this to isLogged in property with get/set
     public boolean isLoggedIn()
     {
         return isLoggedIn;
-    }
-
-    public void setLogin(boolean success)
-    {
-        isLoggedIn = success;
     }
 
 }

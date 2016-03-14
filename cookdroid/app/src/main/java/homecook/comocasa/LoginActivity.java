@@ -350,7 +350,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         /*
         Attempts to login at API
          */
-            String url = "api-auth/" + mEmail + "-" + mPassword + ".json";
+            String url = "api-auth/" + mEmail + "/" + mPassword + "?format=json";
 
             HomecookRESTApiClient homecookRestApi = ((AppInfo) getApplication()).homecookRestApi;
 
@@ -361,8 +361,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //Parse response to see if login successful and set isLoggedIn to True
                             Log.d(TAG, response.toString());
 
-                            // Parse response object to see if successfully authenticated the user/password
-                            ((AppInfo) getApplication()).setLogin(true);
+                            try {
+                                String mUserName = response.getString("username").toString();
+                                ((AppInfo) getApplication()).Initialize(mEmail, mUserName, mPassword, mSaveLoginInfo);
+                            } catch (org.json.JSONException e) {
+                                Log.d(TAG, "Could not parse login response", e.getCause());
+                            }
                         }
 
                         @Override
@@ -415,8 +419,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 //Initialize app-info
-                ((AppInfo) getApplication()).Initialize(mEmail, mPassword, mSaveLoginInfo);
-
                 String welcome_string = "Welcome, " + mEmail + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
                 //finish();
