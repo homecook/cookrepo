@@ -49,7 +49,7 @@ cooks_meals = meal_views.MealViewSet.as_view({      # detailed route for getting
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api-auth/(?P<email>.+)/(?P<password>.+)', user_views.user_login, name='user_login'),     # login
+    url(r'^login/(?P<email>.+)/(?P<password>.+)', user_views.user_login, name='user_login'),     # login
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^cook.meals/(?P<cook_id>\d+)', cooks_meals, name='cooks_meals'),     # detailed route for cook's meals
     url(r'^', include(router.urls))

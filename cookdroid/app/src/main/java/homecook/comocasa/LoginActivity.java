@@ -341,6 +341,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mPassword;
         private final boolean mSaveLoginInfo;
 
+        private int failStatusCode;
+
         UserLoginTask(String email, String password, boolean saveLoginInfo) {
             mEmail = email;
             mPassword = password;
@@ -351,15 +353,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         /*
         Attempts to login at API
          */
-            String url = "api-auth/" + mEmail + "/" + mPassword + "?format=json";
-
+            String url = "login/" + mEmail + "/" + mPassword + "?format=json";
             HomecookRESTApiClient homecookRestApi = ((AppInfo) getApplication()).homecookRestApi;
-
-            //TODO: send RequestParam object containing username and password and send with request
-            RequestParams params = new RequestParams();
-            params.put("email", mEmail);
-            params.put("password", mPassword);
-            System.out.println(params.toString());
 
             homecookRestApi.sync_get(url, null,
                     new JsonHttpResponseHandler() {
@@ -379,7 +374,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.e(TAG, "Could not authenticate user", throwable);
+                            failStatusCode = statusCode;
+                            Log.e(TAG, "Could not authenticate user (Status " + Integer.toString(statusCode) + ")", throwable);
                         }
 
                     }
@@ -416,7 +412,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //finish();
             }
             else {
-                String error_string = "Login failed";
+                String error_string = "Login failed (Status " + Integer.toString(failStatusCode) + ")";
                 Toast.makeText(getBaseContext(), error_string, Toast.LENGTH_LONG).show();
                 mPasswordView.setError("Incorrect login information, try again.");
                 mPasswordView.requestFocus();

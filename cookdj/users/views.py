@@ -22,7 +22,6 @@ def user_login(request, email, password):
     """
     User login
     """
-    validated = False
     try:
         user = User.objects.get(email=email)
         if password == 'asdfghjkl':     # replace with an actual check for password when that's possible..
