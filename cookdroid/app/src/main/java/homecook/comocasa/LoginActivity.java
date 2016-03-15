@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
@@ -354,6 +355,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             HomecookRESTApiClient homecookRestApi = ((AppInfo) getApplication()).homecookRestApi;
 
+            //TODO: send RequestParam object containing username and password and send with request
+            RequestParams params = new RequestParams();
+            params.put("email", mEmail);
+            params.put("password", mPassword);
+            System.out.println(params.toString());
+
             homecookRestApi.sync_get(url, null,
                     new JsonHttpResponseHandler() {
 
@@ -409,7 +416,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //finish();
             }
             else {
-                mPasswordView.setError("Incorrect login, try again.");
+                String error_string = "Login failed";
+                Toast.makeText(getBaseContext(), error_string, Toast.LENGTH_LONG).show();
+                mPasswordView.setError("Incorrect login information, try again.");
                 mPasswordView.requestFocus();
             }
         }

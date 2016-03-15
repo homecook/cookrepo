@@ -25,12 +25,13 @@ def user_login(request, email, password):
     validated = False
     try:
         user = User.objects.get(email=email)
-        if user.password == password:
+        if password == 'asdfghjkl':     # replace with an actual check for password when that's possible..
             serializer = UserLoginSerializer(user)
             return Response(serializer.data)
         else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)    # return error if password does not match
             # TODO: replace with an actual authentication
-            serializer = UserLoginSerializer(user)
-            return Response(serializer.data)
+            # serializer = UserLoginSerializer(user)
+            # return Response(serializer.data)
     except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)   # return error if user not found
