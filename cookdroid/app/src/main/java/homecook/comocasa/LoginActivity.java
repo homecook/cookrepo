@@ -3,6 +3,7 @@ package homecook.comocasa;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -49,7 +51,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
     private static final String TAG = "LoginActivity";
 
     /**
@@ -61,14 +62,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -87,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -409,7 +403,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 String welcome_string = "Welcome, " + ((AppInfo) getApplication()).getUserId() + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
-                //finish();
+
+                // create an Intent to take you over to a new DetailActivity
+                Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(mainIntent);
+                finish();
             }
             else {
                 String error_string = "Login failed (Status " + Integer.toString(failStatusCode) + ")";

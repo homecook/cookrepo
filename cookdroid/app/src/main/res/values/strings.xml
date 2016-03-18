@@ -2,6 +2,7 @@
     <string name="app_name">Como Casa</string>
 
     <!-- Strings related to login -->
+    <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in</string>
@@ -14,4 +15,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings related to main -->
+    <string name="title_activity_main">Meals</string>
+    <string name="action_refresh_meals">Refresh Meals</string>
 </resources>
