@@ -18,5 +18,10 @@
 
     <!-- Strings related to main -->
     <string name="title_activity_main">Meals</string>
-    <string name="action_refresh_meals">Refresh Meals</string>
+    <string name="action_refresh_meals">Refresh meals</string>
+    <string name="action_create_meal">Create a new meal</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Log out</string>
+    <string name="title_activity_create_meal">CreateMealActivity</string>
+
 </resources>

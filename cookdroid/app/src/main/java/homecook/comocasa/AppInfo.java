@@ -20,8 +20,8 @@ public class AppInfo extends Application
     private static final String TAG = "AppInfo";
 
     //Store the userId for application-wide use
-    private String userId;
-    private String password;
+    private String userId = "";
+    private String password = "";
     private Boolean isLoggedIn = false;
 
     //Save username and password for easy access
@@ -71,7 +71,7 @@ public class AppInfo extends Application
         // Get and set userId
         this.userId = username;
         this.password = password;
-        isLoggedIn = true;
+        this.isLoggedIn = true;
 
         if (saveInfo)
         {
@@ -84,6 +84,21 @@ public class AppInfo extends Application
 
         //TODO: Authenticate homecookRestApi by providing username/password
         Log.i(TAG, "Successfully initialized app-info, and logged in " + username);
+
+    }
+
+    public void logOut()
+    {
+        // Reset all variables related to user
+        isLoggedIn = false;
+        userId = "";
+        password = "";
+
+        SharedPreferences.Editor e = mSharedPreferences.edit();
+        e.putString(PREF_EMAIL, "");
+        e.putString(PREF_PASSWORD, "");
+        e.putBoolean(PREF_AUTOLOGIN, false);
+        e.putString(PREF_USERID, "");
 
     }
 

@@ -73,7 +73,7 @@ public class JSONAdapter extends BaseAdapter {
         JSONObject jsonObject = (JSONObject) getItem(position);
 
         //Set image to default
-        holder.thumbnailImageView.setImageResource(R.mipmap.ic_books);
+        holder.thumbnailImageView.setImageResource(R.drawable.ic_arrow_forward_black_24dp);
 
         // Grab meal name and cook if it can be parsed from json object
         String name = "unknown";

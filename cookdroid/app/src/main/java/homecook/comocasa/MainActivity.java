@@ -1,14 +1,19 @@
 package homecook.comocasa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -27,22 +32,51 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+
+        //Toolbar consists of all actions
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(myToolbar);     //set myToolbar as the ActionBar for the activity
 
         mJSONAdapter = new JSONAdapter(this, getLayoutInflater());
         mealListView = (ListView) findViewById(R.id.meal_listview);
         mealListView.setAdapter(mJSONAdapter);
+    }
 
-        Button refreshMealsButton = (Button) findViewById(R.id.refresh_meals_button);
-        refreshMealsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_create_meal:
+                Toast.makeText(getBaseContext(), "Create meal coming soon...", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_refresh_meals:
+                Toast.makeText(getBaseContext(), "Refreshing meals", Toast.LENGTH_LONG).show();
                 refreshMeals();
-            }
-        });     // on Click lauch attemptLogin function
+                return true;
+            case R.id.action_logout:
+                Toast.makeText(getBaseContext(), "Loggin out...", Toast.LENGTH_LONG).show();
+                // create an Intent to take you over to a new DetailActivity
+                ((AppInfo) getApplication()).logOut();
+                // Show login window
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case R.id.action_settings:
+                Toast.makeText(getBaseContext(), "Settings coming soon...", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                Toast.makeText(getBaseContext(), "Invalid option selected (how?)", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void refreshMeals(){
