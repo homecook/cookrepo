@@ -24,6 +24,86 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:hint="@string/prompt_create_meal_name"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/description"
+                android:hint="@string/prompt_create_meal_description"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/price"
+                android:hint="Price"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/num_servings"
+                android:hint="Number of servings"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/expiry_date"
+                android:hint="Expiry date"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/expiry_time"
+                android:hint="Expiry time"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/available_date"
+                android:hint="Available date"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/available_time"
+                android:hint="Available time"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cusine"
+                android:hint="Cusine"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
 
         </LinearLayout>
 

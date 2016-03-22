@@ -54,27 +54,34 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+
             case R.id.action_create_meal:
-                Toast.makeText(getBaseContext(), "Create meal coming soon...", Toast.LENGTH_LONG).show();
+                // Launch create meal screen
+                Intent create_meal_intent = new Intent(getBaseContext(), CreateMealActivity.class);
+                startActivity(create_meal_intent);
                 return true;
+
             case R.id.action_refresh_meals:
                 Toast.makeText(getBaseContext(), "Refreshing meals", Toast.LENGTH_LONG).show();
                 refreshMeals();
                 return true;
+
             case R.id.action_logout:
                 Toast.makeText(getBaseContext(), "Loggin out...", Toast.LENGTH_LONG).show();
                 // create an Intent to take you over to a new DetailActivity
                 ((AppInfo) getApplication()).logOut();
-                // Show login window
-                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(intent);
+                // Show login screen
+                Intent login_intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(login_intent);
                 finish();
                 return true;
+
             case R.id.action_settings:
                 Toast.makeText(getBaseContext(), "Settings coming soon...", Toast.LENGTH_LONG).show();
                 return true;
+
             default:
-                Toast.makeText(getBaseContext(), "Invalid option selected (how?)", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Invalid option selected (but how?)", Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
         }
     }

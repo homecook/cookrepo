@@ -4,7 +4,11 @@ package homecook.comocasa;
  * Created by krishan on 16-03-11.
  */
 
+import android.content.Context;
+
 import com.loopj.android.http.*;
+
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class HomecookRESTApiClient {
 
@@ -14,7 +18,7 @@ public class HomecookRESTApiClient {
 
     public void set_auth(String username, String pass){
         client.setBasicAuth(username,pass);
-        sync_client.setBasicAuth(username,pass);
+        sync_client.setBasicAuth(username, pass);
     }
 
     public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
@@ -23,6 +27,10 @@ public class HomecookRESTApiClient {
 
     public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(getAbsoluteUrl(url), params, responseHandler);
+    }
+
+    public void post_json(Context context, String url, StringEntity entity, AsyncHttpResponseHandler responseHandler) {
+        client.post(context, url, entity, "application/json", responseHandler);
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
@@ -34,5 +42,9 @@ public class HomecookRESTApiClient {
      */
     public void sync_get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         sync_client.get(getAbsoluteUrl(url), params, responseHandler);
+    }
+
+    public void sync_post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        sync_client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 }
