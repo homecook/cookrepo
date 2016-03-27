@@ -10,7 +10,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class HomecookRESTApiClient {
 
-    // private static final String BASE_URL = "http://10.0.2.2:8000/";    //TODO: modify with the new server
+    // private static final String BASE_URL = "http://10.0.2.2:8000/";
     private static final String BASE_URL = "http://krisuj.pythonanywhere.com/";
     private AsyncHttpClient client = new AsyncHttpClient();
     private SyncHttpClient sync_client = new SyncHttpClient();

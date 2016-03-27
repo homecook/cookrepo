@@ -22,6 +22,9 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+/*
+The main hub of the app - this displays the list of meals, and provides a major hub for actions.
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -128,6 +131,5 @@ public class MainActivity extends AppCompatActivity {
         );
 
     }
-
 
 }
