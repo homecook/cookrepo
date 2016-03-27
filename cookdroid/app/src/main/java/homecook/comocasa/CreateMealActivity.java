@@ -113,7 +113,7 @@ public class CreateMealActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
 
-        nameView.setText("auto chicken meal");
+        nameView.setText("auto chicken meal " + dtFormat.format(c.getTime()));
         decriptionView.setText("This meal was auto generated at " + dtFormat.format(c.getTime()));
         priceView.setText("11");
 
@@ -134,32 +134,30 @@ public class CreateMealActivity extends AppCompatActivity {
         SimpleDateFormat timeFormat = new SimpleDateFormat ("HH:mm");
 
         // Store values at the time of create meal attempt
-        String name = nameView.getText().toString();
-        String description = decriptionView.getText().toString();
-        Double price = Double.parseDouble(priceView.getText().toString());
-        Integer servings = Integer.parseInt(servingsView.getText().toString());
-        String cusine = cusineView.getText().toString();
-
+        String name;
+        String description;
+        Double price;
+        Integer servings;
+        String cusine;
         // Parse data in text fields into dates and time objects (later parsed back to string...)
         Date expiryDate;
         Date expiryTime;
         Date availableDate;
         Date availableTime;
+
+        JSONObject data = new JSONObject();
+
         try {
+            name = nameView.getText().toString();
+            description = decriptionView.getText().toString();
+            price = Double.parseDouble(priceView.getText().toString());
+            servings = Integer.parseInt(servingsView.getText().toString());
+            cusine = cusineView.getText().toString();
             expiryDate = dateFormat.parse(expiryDateView.getText().toString());
             expiryTime = timeFormat.parse(expiryTimeView.getText().toString());
             availableDate = dateFormat.parse(availableDateView.getText().toString());
             availableTime = timeFormat.parse(availableTimeView.getText().toString());
-        } catch (ParseException e){
-            Toast.makeText(getBaseContext(), "Invalid date or time", Toast.LENGTH_LONG).show();
-            cancel = true;
-            return;
-        }
 
-        //Add information to json object (must be in exact form) TODO: Add userid (must have it!), also check to see if user is logged in!
-        JSONObject data = new JSONObject();
-
-        try {
             data.put("meal_cook", ((AppInfo) getApplication()).getUserId());
             data.put("meal_name", name);
             data.put("meal_description", description);
@@ -170,9 +168,21 @@ public class CreateMealActivity extends AppCompatActivity {
             data.put("meal_price", price);
             data.put("meal_servings", servings);
             data.put("meal_cusine", cusine);
-        } catch (JSONException e){
-            Toast.makeText(getBaseContext(), "Invalid data (when converting to JSON object)", Toast.LENGTH_LONG).show();
+
+        } catch (ParseException e){
+            Toast.makeText(getBaseContext(), "Invalid values (when reading values from input).", Toast.LENGTH_LONG).show();
+            cancel = true;
         }
+        catch (JSONException e){
+            Toast.makeText(getBaseContext(), "Invalid values (when mapping to json).", Toast.LENGTH_LONG).show();
+            cancel = true;
+        }
+        catch (Exception e){
+            Toast.makeText(getBaseContext(), "Unknown error occurred.", Toast.LENGTH_LONG).show();
+            cancel = true;
+        }
+
+        //Add information to json object (must be in exact form) TODO: Add userid (must have it!), also check to see if user is logged in!
 
         //Execute meal create task
         if (cancel){
