@@ -26,7 +26,7 @@ def user_login(request, email, password):
         user = User.objects.get(email=email)
         if password == 'asdfghjkl':     # replace with an actual check for password when that's possible..
             serializer = UserLoginSerializer(user)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)    # return error if password does not match
             # TODO: replace with an actual authentication

@@ -14,7 +14,7 @@ class Meal(models.Model):
     Information available as of meal creation
     '''
 
-    SPICE_CHOICES = [('L', 'Mild'), ('M', 'Medium'), ('H', 'Hot')]
+    SPICE_CHOICES = [('L', 'Mild'), ('M', 'Medium'), ('H', 'Hot'), ('O', 'Other')]
 
     CUSINE_CHOICES = [('Indian', 'Indian'),
                       ('Spanish', 'Spanish'),
@@ -41,10 +41,10 @@ class Meal(models.Model):
     meal_expiry_time = models.TimeField(blank=False)
     meal_price = models.DecimalField(blank=False, max_digits=2, decimal_places=0)
     meal_servings = models.IntegerField(blank=False)
-    meal_gluent_free = models.BooleanField(default=False)
+    meal_gluten_free = models.BooleanField(default=False)
     meal_nut_free = models.BooleanField(default=False)
     meal_lactose_free = models.BooleanField(default=False)
-    meal_spice_level = models.CharField(choices=SPICE_CHOICES, max_length=240)
+    meal_spice_level = models.CharField(choices=SPICE_CHOICES, default='Other', max_length=240)
     meal_cusine = models.CharField(choices=CUSINE_CHOICES, default='Other', max_length=240)
     meal_mealtype = models.CharField(choices=MEALTYPE_CHOICES, default='Other', max_length=240)
     meal_creation_datetime = models.DateTimeField(blank=False, default=timezone.now)

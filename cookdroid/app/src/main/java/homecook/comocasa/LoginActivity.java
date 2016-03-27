@@ -19,7 +19,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
@@ -111,6 +109,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Link checkbox
         mLoginCheckbox = (CheckBox) findViewById(R.id.checkbox_auto_login);
 
+        // TODO: Default information remove later...
+        mEmailView.setText("kri.suj@gmail.com");
+        mPasswordView.setText("asdfghjkl");
     }
 
     /**
@@ -359,8 +360,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.i(TAG, response.toString());
 
                             try {
+                                Integer mUserId = response.getInt("id");
                                 String mUserName = response.getString("username").toString();
-                                ((AppInfo) getApplication()).Initialize(mEmail, mUserName, mPassword, mSaveLoginInfo);
+                                ((AppInfo) getApplication()).Initialize(mEmail, mUserId, mUserName, mPassword, mSaveLoginInfo);
                             } catch (org.json.JSONException e) {
                                 Log.e(TAG, "Could not parse login response", e.getCause());
                             }
@@ -401,7 +403,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                String welcome_string = "Welcome, " + ((AppInfo) getApplication()).getUserId() + "!";
+                String welcome_string = "Welcome, " + ((AppInfo) getApplication()).getUserName() + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
 
                 // create an Intent to take you over to a new DetailActivity

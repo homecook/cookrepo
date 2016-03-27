@@ -3,8 +3,6 @@ package homecook.comocasa;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,11 +10,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -30,6 +26,7 @@ import java.util.Date;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class CreateMealActivity extends AppCompatActivity {
 
@@ -148,15 +145,16 @@ public class CreateMealActivity extends AppCompatActivity {
             return;
         }
 
-        //Add information to json object (must be in exact form)
+        //Add information to json object (must be in exact form) TODO: Add userid (must have it!), also check to see if user is logged in!
         JSONObject data = new JSONObject();
 
         try {
+            data.put("meal_cook", ((AppInfo) getApplication()).getUserId());
             data.put("meal_name", name);
             data.put("meal_description", description);
-            data.put("meal_available_date", availableDate);
-            data.put("meal_available_time", availableTime);
-            data.put("meal_expiry_date", expiryDate);
+            data.put("meal_available_date", dateFormat.format(availableDate));
+            data.put("meal_available_time", timeFormat.format(availableTime));
+            data.put("meal_expiry_date", dateFormat.format(expiryDate));
             data.put("meal_expiry_time", expiryTime);
             data.put("meal_price", price);
             data.put("meal_servings", servings);
@@ -182,41 +180,48 @@ public class CreateMealActivity extends AppCompatActivity {
     public class CreateMealTask extends AsyncTask<Void, Void, Boolean> {
         private JSONObject data;
         private int failStatusCode;
-        Boolean success;
+        Boolean successfullyCreated = false;
 
         CreateMealTask(JSONObject data) {
             this.data = data;
         }
 
         public void createMeal() {
-            String url = "meals";
+            String url = "meals.json";
 
             StringEntity entity = null;
             try {
                 entity = new StringEntity(data.toString());
-            } catch (UnsupportedEncodingException e){
+                entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            } catch (UnsupportedEncodingException e) {
                 Log.e(TAG, "Invalid data. Could not parse to string. " + e.toString());
             }
 
             HomecookRESTApiClient homecookRestApi = ((AppInfo) getApplication()).homecookRestApi;
 
-            homecookRestApi.post_json(getBaseContext(), url, entity,
+            homecookRestApi.sync_post_json(getBaseContext(), url, entity,
                     new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             //Parse response to see if login successful and set isLoggedIn to True
                             Log.i(TAG, response.toString());
-                            success = true;
+                            successfullyCreated = true;
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             failStatusCode = statusCode;
-                            Log.e(TAG, "Could not create meal (Status " + Integer.toString(statusCode) + ")", throwable);
-                            success = false;
+                            Log.e(TAG, "Could not create meal (Status " + Integer.toString(statusCode) + "). errorResponse " + errorResponse.toString(), throwable);
+                            successfullyCreated = false;
                         }
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String message, Throwable throwable){
+                            failStatusCode = statusCode;
+                            Log.e(TAG, "Could not create meal (Status " + Integer.toString(statusCode) + ")", throwable);
+                            successfullyCreated = false;
+                        }
                     }
             );
         }
@@ -229,7 +234,7 @@ public class CreateMealActivity extends AppCompatActivity {
 
             // Sets the isLoggedIn to true in AppInfo
             createMeal();
-            return success;
+            return successfullyCreated;
         }
 
         @Override
@@ -240,7 +245,7 @@ public class CreateMealActivity extends AppCompatActivity {
             //showProgress(false);
 
             if (success) {
-                String welcome_string = "Successfully created meal, " + ((AppInfo) getApplication()).getUserId() + "!";
+                String welcome_string = "Successfully created meal, " + ((AppInfo) getApplication()).getUserName() + "!";
                 Toast.makeText(getBaseContext(), welcome_string, Toast.LENGTH_LONG).show();
 
                 // create an Intent to take you over to a new DetailActivity

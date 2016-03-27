@@ -48,6 +48,5 @@ class MealSerializer(serializers.ModelSerializer):
                     'meal_cusine',
                     'meal_mealtype',
                     'meal_creation_datetime',
-                    'orders',   # note this defaults to PrimaryKeyRelatedField type (automatically identifies reverse relationship)
                     'meal_subscribers',
                     )

@@ -57,8 +57,15 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_create_meal:
                 // Launch create meal screen
-                Intent create_meal_intent = new Intent(getBaseContext(), CreateMealActivity.class);
-                startActivity(create_meal_intent);
+                if (!((AppInfo) getApplication()).isLoggedIn()){
+                    Toast.makeText(getBaseContext(), "You must login to create a meal...", Toast.LENGTH_LONG).show();
+                    Intent login_intent = new Intent(getBaseContext(), LoginActivity.class);
+                    startActivity(login_intent);
+                }
+                else {
+                    Intent create_meal_intent = new Intent(getBaseContext(), CreateMealActivity.class);
+                    startActivity(create_meal_intent);
+                }
                 return true;
 
             case R.id.action_refresh_meals:
@@ -69,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 Toast.makeText(getBaseContext(), "Loggin out...", Toast.LENGTH_LONG).show();
                 // create an Intent to take you over to a new DetailActivity
+
+                // If logged in, log out
                 ((AppInfo) getApplication()).logOut();
+
                 // Show login screen
                 Intent login_intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(login_intent);

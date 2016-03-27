@@ -23,7 +23,7 @@ TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates').replace('\\'
 SECRET_KEY = '^(gu*s7t7j7q%guliyvgx!lxa+zf!f78pgb!rf%1c=j&$q9j4z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 

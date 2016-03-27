@@ -5,13 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.loopj.android.http.*;
-
-import org.json.JSONObject;
-import org.json.JSONArray;
-
-import cz.msebera.android.httpclient.Header;
-
 /**
  * Maintains the state of the application
  */
@@ -19,13 +12,15 @@ public class AppInfo extends Application
 {
     private static final String TAG = "AppInfo";
 
-    //Store the userId for application-wide use
-    private String userId = "";
+    //Store the userName for application-wide use
+    private String userName = "";
+    private Integer userId = -1;
     private String password = "";
     private Boolean isLoggedIn = false;
 
     //Save username and password for easy access
     private static final String PREFS = "prefs";
+    private static final String PREF_USERNAME = "username";
     private static final String PREF_USERID = "userid";
     private static final String PREF_EMAIL = "email";
     private static final String PREF_PASSWORD = "password";
@@ -44,9 +39,10 @@ public class AppInfo extends Application
     //TODO: Must update this to make sure all information can is validated against the server
     public boolean Initialize()
     {
+
         // Read the user's name,
         // or an empty string if nothing found
-        String userId = mSharedPreferences.getString(PREF_USERID, "");
+        String userId = mSharedPreferences.getString(PREF_USERNAME, "");
 
         if (userId == "") {
             // Not logged in...time to go do this
@@ -58,20 +54,21 @@ public class AppInfo extends Application
         {
             // If the name is valid. OK!
             Toast.makeText(this, "Welcome back " + userId.toString(), Toast.LENGTH_LONG).show();
-            this.userId = userId;
+            this.userName = userId;
             isLoggedIn = true;
             return true;
         }
     }
 
     //Initializing app instance (set userid, etc) from login page
-    public void Initialize(String email, String username, String password, boolean saveInfo)
+    public void Initialize(String email, Integer id, String username, String password, boolean saveInfo)
     {
         mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
-        // Get and set userId
-        this.userId = username;
+
+        // Get and set userName
+        this.userId = id;
+        this.userName = username;
         this.password = password;
-        this.isLoggedIn = true;
 
         if (saveInfo)
         {
@@ -79,26 +76,33 @@ public class AppInfo extends Application
             e.putString(PREF_EMAIL, email);
             e.putString(PREF_PASSWORD, password);
             e.putBoolean(PREF_AUTOLOGIN, true);
-            e.putString(PREF_USERID, username);
+            e.putString(PREF_USERNAME, username);
+            e.putInt(PREF_USERID, id);
         }
 
         //TODO: Authenticate homecookRestApi by providing username/password
+        homecookRestApi.set_auth(userName, this.password);
         Log.i(TAG, "Successfully initialized app-info, and logged in " + username);
+
+        isLoggedIn = true;
 
     }
 
     public void logOut()
     {
-        // Reset all variables related to user
-        isLoggedIn = false;
-        userId = "";
-        password = "";
+        if (isLoggedIn()) {
+            // Reset all variables related to user
+            userName = "";
+            password = "";
 
-        SharedPreferences.Editor e = mSharedPreferences.edit();
-        e.putString(PREF_EMAIL, "");
-        e.putString(PREF_PASSWORD, "");
-        e.putBoolean(PREF_AUTOLOGIN, false);
-        e.putString(PREF_USERID, "");
+            SharedPreferences.Editor e = mSharedPreferences.edit();
+            e.putString(PREF_EMAIL, "");
+            e.putString(PREF_PASSWORD, "");
+            e.putBoolean(PREF_AUTOLOGIN, false);
+            e.putString(PREF_USERNAME, "");
+            e.putInt(PREF_USERID, -1);
+            isLoggedIn = false;
+        }
 
     }
 
@@ -107,41 +111,12 @@ public class AppInfo extends Application
         return isLoggedIn;
     }
 
-    public String getUserId(){
+    public String getUserName(){
+        return userName;
+    }
+
+    public Integer getUserId(){
         return userId;
     }
 
-}
-
-/**
- * Define all android interactions with the homecook API (maybe not the right way to do it...)
- */
-class HomecookRESTApiClientUsage {
-
-    private static final String TAG = "HomecookRestClientUsage";
-
-    public static void getMeals(HomecookRESTApiClient homecookRestApi) {
-        /*
-        Handles meal data for meal view
-         */
-
-        homecookRestApi.get("meals.json", null, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d(TAG, response.toString());
-                // If the response is JSONObject instead of expected JSONArray
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d(TAG, response.toString());
-            }
-
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d(TAG, "onFailure(int, Header[], Throwable, JSONObject) was not overriden, but callback was received", throwable);
-            }
-
-        });
-    }
 }
