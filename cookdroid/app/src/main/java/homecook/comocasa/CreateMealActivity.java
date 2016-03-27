@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
@@ -106,12 +107,22 @@ public class CreateMealActivity extends AppCompatActivity {
     }
 
     public void loadDefaultMeal(){
+        SimpleDateFormat dtFormat = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+
         nameView.setText("auto chicken meal");
-        decriptionView.setText("This meal was auto generated");
+        decriptionView.setText("This meal was auto generated at " + dtFormat.format(c.getTime()));
         priceView.setText("11");
-        expiryDateView.setText("2016-04-08");
+
+        c.add(Calendar.DATE, 7);
+        expiryDateView.setText(dateFormat.format(c.getTime()));
         expiryTimeView.setText("15:00");
-        availableDateView.setText("2016-04-10");
+
+        c.add(Calendar.DATE, 2);
+        availableDateView.setText(dateFormat.format(c.getTime()));
         availableTimeView.setText("18:30");
         servingsView.setText("4");
         cusineView.setText("Italian");
@@ -129,11 +140,11 @@ public class CreateMealActivity extends AppCompatActivity {
         Integer servings = Integer.parseInt(servingsView.getText().toString());
         String cusine = cusineView.getText().toString();
 
+        // Parse data in text fields into dates and time objects (later parsed back to string...)
         Date expiryDate;
         Date expiryTime;
         Date availableDate;
         Date availableTime;
-
         try {
             expiryDate = dateFormat.parse(expiryDateView.getText().toString());
             expiryTime = timeFormat.parse(expiryTimeView.getText().toString());
@@ -155,7 +166,7 @@ public class CreateMealActivity extends AppCompatActivity {
             data.put("meal_available_date", dateFormat.format(availableDate));
             data.put("meal_available_time", timeFormat.format(availableTime));
             data.put("meal_expiry_date", dateFormat.format(expiryDate));
-            data.put("meal_expiry_time", expiryTime);
+            data.put("meal_expiry_time", timeFormat.format(expiryTime));
             data.put("meal_price", price);
             data.put("meal_servings", servings);
             data.put("meal_cusine", cusine);
@@ -187,7 +198,7 @@ public class CreateMealActivity extends AppCompatActivity {
         }
 
         public void createMeal() {
-            String url = "meals.json";
+            String url = "meals/";
 
             StringEntity entity = null;
             try {

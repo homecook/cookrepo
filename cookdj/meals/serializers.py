@@ -27,26 +27,7 @@ class MealBasicInfoSerializer(serializers.ModelSerializer):
 
 
 class MealSerializer(serializers.ModelSerializer):
-    meal_cook = serializers.ReadOnlyField(source='meal_cook.username')  # Override the default foreign key to user
+    # meal_cook = serializers.ReadOnlyField(source='meal_cook.username')  # Override the default foreign key to user
 
     class Meta:
         model = Meal
-        fields = (  'meal_id',
-                    'meal_cook',
-                    'meal_name',
-                    'meal_description',
-                    'meal_available_date',
-                    'meal_available_time',
-                    'meal_expiry_date',
-                    'meal_expiry_time',
-                    'meal_price',
-                    'meal_servings',
-                    'meal_gluten_free',
-                    'meal_nut_free',
-                    'meal_lactose_free',
-                    'meal_spice_level',
-                    'meal_cusine',
-                    'meal_mealtype',
-                    'meal_creation_datetime',
-                    'meal_subscribers',
-                    )
