@@ -41,7 +41,7 @@ class MealSerializer(serializers.ModelSerializer):
                     'meal_expiry_time',
                     'meal_price',
                     'meal_servings',
-                    'meal_gluent_free',
+                    'meal_gluten_free',
                     'meal_nut_free',
                     'meal_lactose_free',
                     'meal_spice_level',

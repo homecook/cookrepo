@@ -14,6 +14,9 @@ git add <filename>
 
 adding -a to commit adds all files
 
+PULLING NEW CHANGES FROM REMOTE BRANCH
+git pull
+
 COMMITING CHANGES
 git commit -m "describe changes here"
 OR IF YOU NEED TO ADD FILES
